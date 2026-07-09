@@ -105,15 +105,6 @@ export default function Home() {
             Confirm Import
           </button>
         )}
-        {stats && (
-          <ResultStats
-            processedRows={stats.processedRows}
-            importedRows={stats.importedRows}
-            skippedRows={stats.skippedRows}
-            processingTimeMs={stats.processingTimeMs}
-          />
-        )}
-        {crmRecords.length > 0 && <ResultTable records={crmRecords} />}
       </div>
     </main>
   );
