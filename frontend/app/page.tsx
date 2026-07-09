@@ -6,10 +6,24 @@ import UploadBox from "@/components/UploadBox/UploadBox";
 import { CSVRow } from "@/types/csv";
 import { parseCSV } from "@/lib/csv";
 import PreviewTable from "@/components/PreviewTable/PreviewTable";
+import { uploadCSV } from "@/services/api";
+import { CRMRecord } from "@/types/crm";
+import Loader from "@/components/Loader/Loader";
+import ResultStats from "@/components/ResultStats/ResultStats";
+import ResultTable from "@/components/ResultTable/ResultTable";
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewRows, setPreviewRows] = useState<CSVRow[]>([]);
+  const [crmRecords, setCRMRecords] = useState<CRMRecord[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState<{
+    processedRows: number;
+    importedRows: number;
+    skippedRows: number;
+    totalBatches: number;
+    processingTimeMs: number;
+  } | null>(null);
 
   const handleFileSelect = async (file: File) => {
     setSelectedFile(file);
@@ -24,6 +38,53 @@ export default function Home() {
     }
   };
 
+  const handleImport = async () => {
+    if (!selectedFile) return;
+
+    try {
+      setLoading(true);
+
+      const result = await uploadCSV(selectedFile);
+
+      setCRMRecords(result.records);
+
+      setStats(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-100">
+        <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-12">
+          <Loader />
+        </div>
+      </main>
+    );
+  }
+
+  if (crmRecords.length > 0 && stats) {
+  return (
+    <main className="min-h-screen bg-gray-100">
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12">
+        <Header />
+
+        <ResultStats
+          processedRows={stats.processedRows}
+          importedRows={stats.importedRows}
+          skippedRows={stats.skippedRows}
+          processingTimeMs={stats.processingTimeMs}
+        />
+
+        <ResultTable records={crmRecords} />
+      </div>
+    </main>
+  );
+}
+
   return (
     <main className="min-h-screen bg-gray-100">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col items-center px-6 py-12">
@@ -36,6 +97,23 @@ export default function Home() {
           </p>
         )}
         <PreviewTable rows={previewRows} />
+        {previewRows.length > 0 && (
+          <button
+            onClick={handleImport}
+            className="mt-6 rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition"
+          >
+            Confirm Import
+          </button>
+        )}
+        {stats && (
+          <ResultStats
+            processedRows={stats.processedRows}
+            importedRows={stats.importedRows}
+            skippedRows={stats.skippedRows}
+            processingTimeMs={stats.processingTimeMs}
+          />
+        )}
+        {crmRecords.length > 0 && <ResultTable records={crmRecords} />}
       </div>
     </main>
   );
