@@ -1,7 +1,10 @@
 import { Router } from "express";
 import multer from "multer";
+
 import { parseCSV } from "../services/csv.service.js";
-import { testGemini } from "../services/gemini.service.js";
+import { createBatches } from "../utils/batch.js";
+import { mapCRMFields } from "../services/gemini.service.js";
+import { importCSV } from "../services/import.service.js";
 
 const router = Router();
 
@@ -11,9 +14,7 @@ const upload = multer({
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    console.log("========== NEW REQUEST ==========");
 
-    // Check if file exists
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -21,26 +22,13 @@ router.post("/", upload.single("file"), async (req, res) => {
       });
     }
 
-    console.log("✅ File received:", req.file.originalname);
-
-    // Test CSV parsing
     const rows = await parseCSV(req.file.buffer);
 
-    console.log("✅ CSV parsed successfully");
-    console.log("Rows:", rows.length);
+    const result = await importCSV(rows);
 
-    // Test Gemini connection
-    console.log("⏳ Calling Gemini...");
-
-    const result = await testGemini();
-
-    console.log("✅ Gemini replied:", result);
-
-    return res.status(200).json({
-      success: true,
-      totalRows: rows.length,
-      preview: rows.slice(0, 5),
-      gemini: result,
+    return res.json({
+        success: true,
+        ...result
     });
   } catch (error) {
     console.error("========== ERROR ==========");

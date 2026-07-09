@@ -14,7 +14,7 @@ export function parseCSV(buffer: Buffer): Promise<CSVRow[]> {
         resolve(results.data);
       },
 
-      error: (error) => {
+      error: (error: Error) => {
         reject(error);
       },
     });
