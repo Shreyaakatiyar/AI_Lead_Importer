@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import uploadRouter from "./routes/upload.route.js";
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
+app.use("/upload", uploadRouter);
 
 app.get("/health", (_, res) => {
   res.json({
