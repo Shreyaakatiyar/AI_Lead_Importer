@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.NEXT_PUBLIC_API_URL!;
 
 app.use(cors());
 app.use(express.json());
