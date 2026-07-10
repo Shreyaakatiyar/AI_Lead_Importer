@@ -99,22 +99,28 @@ export default function Home() {
       <Header />
       <Stepper currentStep={currentStep} />
       <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
-        <Hero/>
-        <UploadBox onFileSelect={handleFileSelect} />
-        {selectedFile && (
-          <p className="text-gray-700">
-            Selected File:{" "}
-            <span className="font-semibold">{selectedFile.name}</span>
-          </p>
-        )}
-        <PreviewTable rows={previewRows} />
-        {previewRows.length > 0 && (
-          <button
-            onClick={handleImport}
-            className="rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition"
-          >
-            Confirm Import
-          </button>
+        {previewRows.length > 0 ? (
+          <PreviewTable
+          rows={previewRows}
+          fileName={selectedFile?.name ?? ""}
+          onChangeFile={() => {
+            setSelectedFile(null);
+            setPreviewRows([]);
+            setCurrentStep("upload");
+          }}
+          onContinue={handleImport}
+        />
+        ) : (
+          <>
+          <Hero />
+          <UploadBox onFileSelect={handleFileSelect} />
+          {selectedFile && (
+            <p className="text-gray-700">
+              Selected File:{" "}
+              <span className="font-semibold">{selectedFile.name}</span>
+            </p>
+          )}
+          </>
         )}
       </div>
       <Footer />
