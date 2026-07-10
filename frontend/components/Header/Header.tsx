@@ -9,7 +9,7 @@ export default function Header() {
         <Image
           src={Logo}
           alt="Picture of the author"
-          className='h-9 w-9'
+          className='h-7 w-7'
         />
         <span className="text-lg font-extrabold text-gray-900">AI Lead Importer</span>
       </div>

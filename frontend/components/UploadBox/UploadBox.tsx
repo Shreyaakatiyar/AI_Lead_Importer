@@ -98,13 +98,14 @@ export default function UploadBox({ onFileSelect }: UploadBoxProps) {
       </section>
 
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-        <button
-          type="button"
+        <a
           onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1.5 hover:text-gray-700"
+          href="/sample-leads.csv"
+          download="sample-leads.csv"
         >
           <Download size={14} /> Download sample CSV template
-        </button>
+        </a>
         <span>Maximum file size: 50MB</span>
       </div>
     </div>
