@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/Header/Header";
 import UploadBox from "@/components/UploadBox/UploadBox";
+import Stepper, {Step} from "@/components/Stepper/Stepper";
 import { CSVRow } from "@/types/csv";
 import { parseCSV } from "@/lib/csv";
 import PreviewTable from "@/components/PreviewTable/PreviewTable";
@@ -13,6 +14,7 @@ import ResultStats from "@/components/ResultStats/ResultStats";
 import ResultTable from "@/components/ResultTable/ResultTable";
 
 export default function Home() {
+  const [currentStep, setCurrentStep] = useState<Step>("upload");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewRows, setPreviewRows] = useState<CSVRow[]>([]);
   const [crmRecords, setCRMRecords] = useState<CRMRecord[]>([]);
@@ -32,6 +34,7 @@ export default function Home() {
       const rows = await parseCSV(file);
       console.log(rows);
       setPreviewRows(rows);
+      setCurrentStep("preview");
     } catch (error) {
       console.error("Error parsing CSV:", error);
     }
@@ -42,12 +45,14 @@ export default function Home() {
 
     try {
       setLoading(true);
+      setCurrentStep("process");
 
       const result = await uploadCSV(selectedFile);
 
       setCRMRecords(result.records);
 
       setStats(result);
+      setCurrentStep("results");
     } catch (error) {
       console.error(error);
     } finally {
@@ -59,6 +64,7 @@ export default function Home() {
     return (
       <main className="min-h-screen bg-gray-100">
         <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-12">
+          <Stepper currentStep={currentStep} />
           <Loader />
         </div>
       </main>
@@ -70,6 +76,7 @@ export default function Home() {
       <main className="min-h-screen bg-gray-100">
         <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12">
           <Header />
+          <Stepper currentStep={currentStep} />
 
           <ResultStats
             processedRows={stats.processedRows}
@@ -87,6 +94,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-text flex flex-col">
       <Header />
+      <Stepper currentStep={currentStep} />
       <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
         <UploadBox onFileSelect={handleFileSelect} />
         {selectedFile && (
