@@ -105,9 +105,9 @@ export default function ResultTable({ records }: ResultTableProps) {
         </div>
       </div>
 
-      <div className="overflow-x-auto scrollbar-thin [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300">
-        <table className="min-w-[760px] w-full border-collapse">
-          <thead>
+      <div className="max-h-105 overflow-y-auto overflow-x-auto scrollbar-thin [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 sm:max-h-[520px]">
+        <table className="min-w-190 w-full border-collapse">
+          <thead className="sticky top-0 z-10 bg-white">
             <tr className="border-b border-gray-100">
               {columns.map((column) => (
                 <th
