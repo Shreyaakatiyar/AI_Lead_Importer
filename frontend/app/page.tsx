@@ -62,9 +62,10 @@ export default function Home() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-100">
-        <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-12">
-          <Stepper currentStep={currentStep} />
+      <main className="flex min-h-screen w-full flex-col bg-background text-text">
+        <Header />
+        <Stepper currentStep={currentStep} />
+        <div className="flex w-full flex-1 items-center justify-center px-6 py-12">
           <Loader />
         </div>
       </main>
