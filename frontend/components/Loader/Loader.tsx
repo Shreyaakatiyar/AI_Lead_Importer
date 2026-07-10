@@ -1,5 +1,9 @@
 "use client";
 
+interface LoaderProps {
+  onCancel: () => void;
+}
+
 import { useEffect, useState } from "react";
 import { Cpu, CheckCircle2, Loader2, Circle, Lightbulb, ShieldCheck, Gauge } from "lucide-react";
 
@@ -26,7 +30,7 @@ const tips = [
   "Company names are being matched against a canonical list to keep your records consistent across imports.",
 ];
 
-export default function Loader() {
+export default function Loader({ onCancel }: LoaderProps) {
   const [step, setStep] = useState(0);
   const [percent, setPercent] = useState(4);
   const [tipIndex, setTipIndex] = useState(0);
@@ -187,7 +191,6 @@ export default function Loader() {
         </span>
       </div>
 
-      {/* Floating tip panel */}
       <div className="fixed bottom-6 right-6 hidden w-80 rounded-xl border border-gray-200 bg-white p-5 shadow-xl sm:block">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
@@ -197,7 +200,11 @@ export default function Loader() {
         </div>
         <p className="mt-3 text-sm text-gray-500">{tips[tipIndex]}</p>
         <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 text-sm">
-          <button className="font-medium text-red-500 hover:text-red-600">Cancel Import</button>
+          <button 
+          className="font-medium text-red-500 hover:text-red-600 cursor-pointer"
+          onClick={onCancel}
+          >Cancel Import
+          </button>
         </div>
       </div>
     </div>

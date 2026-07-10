@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Header from "@/components/Header/Header";
 import UploadBox from "@/components/UploadBox/UploadBox";
 import Stepper, {Step} from "@/components/Stepper/Stepper";
@@ -29,6 +29,8 @@ export default function Home() {
     processingTimeMs: number;
   } | null>(null);
 
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   const handleFileSelect = async (file: File) => {
     setSelectedFile(file);
 
@@ -44,22 +46,33 @@ export default function Home() {
 
   const handleImport = async () => {
     if (!selectedFile) return;
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     try {
       setLoading(true);
       setCurrentStep("process");
 
-      const result = await uploadCSV(selectedFile);
+      const result = await uploadCSV(selectedFile, controller.signal);
 
       setCRMRecords(result.records);
 
       setStats(result);
       setCurrentStep("results");
     } catch (error) {
-      console.error(error);
+      if (error instanceof DOMException && error.name === "AbortError") {
+        setCurrentStep("preview");
+      } else {
+        console.error(error);
+      }
     } finally {
       setLoading(false);
+      abortControllerRef.current = null;
     }
+  };
+
+  const handleCancelImport = () => {
+    abortControllerRef.current?.abort();
   };
 
   if (loading) {
@@ -68,7 +81,7 @@ export default function Home() {
         <Header />
         <Stepper currentStep={currentStep} />
         <div className="flex w-full flex-1 items-center justify-center px-6 py-12">
-          <Loader />
+          <Loader onCancel={handleCancelImport} />
         </div>
       </main>
     );
