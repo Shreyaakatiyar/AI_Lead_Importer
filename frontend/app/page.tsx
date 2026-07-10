@@ -28,12 +28,11 @@ export default function Home() {
   const handleFileSelect = async (file: File) => {
     setSelectedFile(file);
 
-    try{
+    try {
       const rows = await parseCSV(file);
       console.log(rows);
       setPreviewRows(rows);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error parsing CSV:", error);
     }
   };
@@ -67,31 +66,31 @@ export default function Home() {
   }
 
   if (crmRecords.length > 0 && stats) {
+    return (
+      <main className="min-h-screen bg-gray-100">
+        <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12">
+          <Header />
+
+          <ResultStats
+            processedRows={stats.processedRows}
+            importedRows={stats.importedRows}
+            skippedRows={stats.skippedRows}
+            processingTimeMs={stats.processingTimeMs}
+          />
+
+          <ResultTable records={crmRecords} />
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-gray-100">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12">
-        <Header />
-
-        <ResultStats
-          processedRows={stats.processedRows}
-          importedRows={stats.importedRows}
-          skippedRows={stats.skippedRows}
-          processingTimeMs={stats.processingTimeMs}
-        />
-
-        <ResultTable records={crmRecords} />
-      </div>
-    </main>
-  );
-}
-
-  return (
-    <main className="min-h-screen bg-gray-100">
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col items-center px-6 py-12">
-        <Header />
+    <main className="min-h-screen bg-background text-text flex flex-col">
+      <Header />
+      <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
         <UploadBox onFileSelect={handleFileSelect} />
         {selectedFile && (
-          <p className="mt-6 text-gray-700">
+          <p className="text-gray-700">
             Selected File:{" "}
             <span className="font-semibold">{selectedFile.name}</span>
           </p>
@@ -100,7 +99,7 @@ export default function Home() {
         {previewRows.length > 0 && (
           <button
             onClick={handleImport}
-            className="mt-6 rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition"
+            className="rounded-lg bg-blue-600 px-6 py-3 text-white font-semibold hover:bg-blue-700 transition"
           >
             Confirm Import
           </button>
