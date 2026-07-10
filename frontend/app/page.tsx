@@ -54,16 +54,19 @@ export default function Home() {
       setCurrentStep("process");
 
       const result = await uploadCSV(selectedFile, controller.signal);
+      console.log("uploadCSV result:", result);
 
       setCRMRecords(result.records);
 
       setStats(result);
+      setPreviewRows([]);  
       setCurrentStep("results");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         setCurrentStep("preview");
       } else {
         console.error(error);
+        setCurrentStep("preview");
       }
     } finally {
       setLoading(false);
@@ -88,24 +91,26 @@ export default function Home() {
   }
 
   if (crmRecords.length > 0 && stats) {
-    return (
-      <main className="min-h-screen bg-gray-100">
-        <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-12">
-          <Header />
-          <Stepper currentStep={currentStep} />
-
-          <ResultStats
-            processedRows={stats.processedRows}
-            importedRows={stats.importedRows}
-            skippedRows={stats.skippedRows}
-            processingTimeMs={stats.processingTimeMs}
-          />
-
-          <ResultTable records={crmRecords} />
-        </div>
-      </main>
-    );
-  }
+  return (
+    <main className="flex min-h-screen w-full flex-col bg-background text-text">
+      <Header />
+      <Stepper currentStep={currentStep} />
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12">
+        <ResultStats
+          processedRows={stats.processedRows}
+          importedRows={stats.importedRows}
+          skippedRows={stats.skippedRows}
+          processingTimeMs={stats.processingTimeMs}
+          onDownloadErrorLog={() => {/* wire to real error log endpoint */}}
+          onFinishImport={() => {/* e.g. reset flow or redirect */}}
+        />
+        <ResultTable records={crmRecords} />
+        
+      </div>
+      <Footer />
+    </main>
+  );
+}
 
   return (
     <main className="min-h-screen bg-background text-text flex flex-col">
