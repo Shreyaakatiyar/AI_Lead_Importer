@@ -13,6 +13,7 @@ import Loader from "@/components/Loader/Loader";
 import ResultStats from "@/components/ResultStats/ResultStats";
 import ResultTable from "@/components/ResultTable/ResultTable";
 import Hero from "@/components/Hero/Hero";
+import Footer from "@/components/Footer/Footer";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState<Step>("upload");
@@ -116,6 +117,7 @@ export default function Home() {
           </button>
         )}
       </div>
+      <Footer />
     </main>
   );
 }
