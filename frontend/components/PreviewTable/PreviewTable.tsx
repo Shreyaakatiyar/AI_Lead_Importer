@@ -4,7 +4,6 @@ import { CSVRow } from "@/types/csv";
 import {
   FileText,
   CheckCircle2,
-  Wand2,
   ArrowRight,
 } from "lucide-react";
 
