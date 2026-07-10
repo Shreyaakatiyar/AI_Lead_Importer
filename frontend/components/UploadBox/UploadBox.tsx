@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
+import { UploadCloud, FileText, Download } from "lucide-react";
 
 interface UploadBoxProps {
   onFileSelect: (file: File) => void;
@@ -56,45 +57,56 @@ export default function UploadBox({ onFileSelect }: UploadBoxProps) {
   };
 
   return (
-    <section
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-      onClick={() => inputRef.current?.click()}
-      className={`mt-10 w-full max-w-3xl cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center shadow-sm transition-all duration-200
-      ${
-        isDragging
-          ? "border-blue-500 bg-blue-50"
-          : "border-gray-300 bg-white hover:border-blue-400 hover:bg-gray-50"
-      }`}
-    >
-      <div className="space-y-4">
-        <div className="text-6xl">
-          {isDragging ? "📥" : "📄"}
+    <div className="mt-10 w-full max-w-3xl">
+      <section
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={() => inputRef.current?.click()}
+        className={`cursor-pointer rounded-2xl border p-10 text-center shadow-sm transition-all duration-200
+        ${
+          isDragging
+            ? "border-blue-400 bg-blue-50"
+            : "border-gray-200 bg-white hover:border-blue-300 hover:bg-gray-50"
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
+            <UploadCloud size={24} className="text-gray-700" />
+          </div>
+
+          <h2 className="text-lg font-semibold text-gray-900">
+            {isDragging ? "Drop your CSV here" : "Click to upload or drag and drop"}
+          </h2>
+
+          <p className="text-sm text-gray-500">
+            Drag & Drop your CSV here or click to browse.
+          </p>
+
+          <span className="flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-600">
+            <FileText size={14} /> .csv
+          </span>
+
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
+      </section>
 
-        <h2 className="text-2xl font-semibold text-black">
-          {isDragging
-            ? "Drop your CSV here"
-            : "Upload your CSV"}
-        </h2>
-
-        <p className="text-gray-500">
-          Drag & Drop your CSV here or click to browse.
-        </p>
-
-        <p className="text-sm text-gray-400">
-          Supported format: .csv
-        </p>
-
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".csv"
-          onChange={handleFileChange}
-          className="hidden"
-        />
+      <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+        <button
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center gap-1.5 hover:text-gray-700"
+        >
+          <Download size={14} /> Download sample CSV template
+        </button>
+        <span>Maximum file size: 50MB</span>
       </div>
-    </section>
+    </div>
   );
 }

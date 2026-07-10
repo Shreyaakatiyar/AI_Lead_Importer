@@ -12,6 +12,7 @@ import { CRMRecord } from "@/types/crm";
 import Loader from "@/components/Loader/Loader";
 import ResultStats from "@/components/ResultStats/ResultStats";
 import ResultTable from "@/components/ResultTable/ResultTable";
+import Hero from "@/components/Hero/Hero";
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState<Step>("upload");
@@ -97,6 +98,7 @@ export default function Home() {
       <Header />
       <Stepper currentStep={currentStep} />
       <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
+        <Hero/>
         <UploadBox onFileSelect={handleFileSelect} />
         {selectedFile && (
           <p className="text-gray-700">
