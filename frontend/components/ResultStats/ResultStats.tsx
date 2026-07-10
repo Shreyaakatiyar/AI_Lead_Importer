@@ -23,7 +23,7 @@ export default function ResultStats({
   return (
     <div className="w-full">
       {/* Success banner */}
-      <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50">
             <CheckCircle2 size={20} className="text-green-600" />
@@ -39,7 +39,7 @@ export default function ResultStats({
         <div className="flex items-center gap-3">
           <button
             onClick={onFinishImport}
-            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 cursor-pointer"
+            className="w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800 sm:w-auto"
           >
             Finish Import
           </button>
@@ -47,7 +47,7 @@ export default function ResultStats({
       </div>
 
       {/* Stat cards */}
-      <div className="mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-xl border border-gray-200 bg-white p-5">
           <h3 className="text-sm text-gray-500">Processed Rows</h3>
           <p className="mt-2 text-2xl font-bold text-gray-900">{processedRows.toLocaleString()}</p>

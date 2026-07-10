@@ -57,13 +57,13 @@ export default function UploadBox({ onFileSelect }: UploadBoxProps) {
   };
 
   return (
-    <div className="mt-10 w-full max-w-3xl">
+    <div className="mt-6 w-full max-w-3xl px-2 sm:mt-10 sm:px-0">
       <section
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className={`cursor-pointer rounded-2xl border p-10 text-center shadow-sm transition-all duration-200
+        className={`cursor-pointer rounded-2xl border p-6 text-center shadow-sm transition-all duration-200 sm:p-8 lg:p-10
         ${
           isDragging
             ? "border-blue-400 bg-blue-50"
@@ -97,7 +97,7 @@ export default function UploadBox({ onFileSelect }: UploadBoxProps) {
         </div>
       </section>
 
-      <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+      <div className="mt-4 flex flex-col gap-2 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between">
         <a
           onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1.5 hover:text-gray-700"
@@ -106,7 +106,7 @@ export default function UploadBox({ onFileSelect }: UploadBoxProps) {
         >
           <Download size={14} /> Download sample CSV template
         </a>
-        <span>Maximum file size: 50MB</span>
+        <span className="text-center sm:text-left">Maximum file size: 50MB</span>
       </div>
     </div>
   );

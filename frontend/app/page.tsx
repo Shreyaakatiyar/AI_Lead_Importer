@@ -103,7 +103,7 @@ export default function Home() {
     <main className="flex min-h-screen w-full flex-col bg-background text-text">
       <Header />
       <Stepper currentStep={currentStep} />
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <ResultStats
           processedRows={stats.processedRows}
           importedRows={stats.importedRows}
@@ -123,7 +123,7 @@ export default function Home() {
     <main className="min-h-screen bg-background text-text flex flex-col">
       <Header />
       <Stepper currentStep={currentStep} />
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12">
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-12 lg:px-8">
         {previewRows.length > 0 ? (
           <PreviewTable
           rows={previewRows}

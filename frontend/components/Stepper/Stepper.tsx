@@ -19,7 +19,7 @@ export default function Stepper({ currentStep }: StepperProps) {
   const currentIndex = steps.findIndex((s) => s.key === currentStep);
 
   return (
-    <div className="flex items-center justify-center py-10">
+    <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-6 sm:gap-0 sm:px-6 sm:py-10">
       {steps.map((step, index) => {
         const isCompleted = index < currentIndex;
         const isActive = index === currentIndex;
@@ -27,8 +27,7 @@ export default function Stepper({ currentStep }: StepperProps) {
 
         return (
           <div key={step.key} className="flex items-center">
-            {/* Circle + label */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center gap-2 sm:flex-row">
               <div
                 className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
                   isCompleted
@@ -53,10 +52,9 @@ export default function Stepper({ currentStep }: StepperProps) {
               </span>
             </div>
 
-            {/* Connector line */}
             {!isLast && (
               <div
-                className={`mx-4 h-px w-24 ${
+                className={`mx-2 hidden h-px w-12 sm:mx-4 sm:block sm:w-20 ${
                   isCompleted ? "bg-gray-900" : "bg-gray-200"
                 }`}
               />

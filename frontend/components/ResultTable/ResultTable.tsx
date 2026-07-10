@@ -90,7 +90,7 @@ export default function ResultTable({ records }: ResultTableProps) {
 
   return (
     <section className="mt-6 w-full min-w-0 rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <div className="flex flex-col gap-3 border-b border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-b border-gray-100 p-3 sm:p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -106,7 +106,7 @@ export default function ResultTable({ records }: ResultTableProps) {
       </div>
 
       <div className="overflow-x-auto scrollbar-thin [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300">
-        <table className="min-w-max border-collapse">
+        <table className="min-w-[760px] w-full border-collapse">
           <thead>
             <tr className="border-b border-gray-100">
               {columns.map((column) => (
@@ -196,7 +196,7 @@ export default function ResultTable({ records }: ResultTableProps) {
         </table>
       </div>
 
-      <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 p-4 text-sm text-gray-500 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 p-3 text-sm text-gray-500 sm:flex-row sm:p-4">
         <span>
           Showing {(currentPage - 1) * PAGE_SIZE + 1} to{" "}
           {Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length.toLocaleString()} results
