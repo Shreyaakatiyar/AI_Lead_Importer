@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { CRMRecord } from "@/types/crm";
-import { Search, SlidersHorizontal, Columns3, MoreVertical, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ResultTableProps {
   records: CRMRecord[];
@@ -22,8 +22,7 @@ function getInitials(name: string) {
 }
 
 function getAvatarColor(name: string) {
-  const index = name.charCodeAt(0) % avatarColors.length;
-  return avatarColors[index];
+  return avatarColors[name.charCodeAt(0) % avatarColors.length];
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -43,6 +42,25 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
+
+// Every column, in display order, mapped to its CRMRecord key.
+const columns: { label: string; key: keyof CRMRecord }[] = [
+  { label: "Created At", key: "created_at" },
+  { label: "Name", key: "name" },
+  { label: "Email", key: "email" },
+  { label: "Status", key: "crm_status" },
+  { label: "Company", key: "company" },
+  { label: "Country Code", key: "country_code" },
+  { label: "Mobile", key: "mobile_without_country_code" },
+  { label: "City", key: "city" },
+  { label: "State", key: "state" },
+  { label: "Country", key: "country" },
+  { label: "Lead Owner", key: "lead_owner" },
+  { label: "Source", key: "data_source" },
+  { label: "Possession Time", key: "possession_time" },
+  { label: "CRM Note", key: "crm_note" },
+  { label: "Description", key: "description" },
+];
 
 export default function ResultTable({ records }: ResultTableProps) {
   const [search, setSearch] = useState("");
@@ -71,8 +89,7 @@ export default function ResultTable({ records }: ResultTableProps) {
   const pageNumbers = Array.from({ length: Math.min(totalPages, 3) }, (_, i) => i + 1);
 
   return (
-    <section className="mt-6 w-full rounded-2xl border border-gray-200 bg-white shadow-sm">
-      {/* Toolbar */}
+    <section className="mt-6 w-full min-w-0 rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-xs">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -86,92 +103,99 @@ export default function ResultTable({ records }: ResultTableProps) {
             className="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-9 pr-3 text-sm text-gray-700 outline-none focus:border-gray-300"
           />
         </div>
-
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-            <SlidersHorizontal size={14} /> Filters
-          </button>
-          <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 hover:bg-gray-50">
-            <Columns3 size={14} /> Columns
-          </button>
-          <button className="rounded-lg p-1.5 hover:bg-gray-50" aria-label="More options">
-            <MoreVertical size={14} />
-          </button>
-        </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto scrollbar-thin [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300">
         <table className="min-w-max border-collapse">
           <thead>
             <tr className="border-b border-gray-100">
-              {["Created At", "Name", "Email", "Status", "Company", "Mobile", "Location", "Lead Owner", "Source", "CRM Note"].map(
-                (label) => (
-                  <th
-                    key={label}
-                    className="whitespace-nowrap px-5 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
-                  >
-                    {label}
-                  </th>
-                )
-              )}
+              {columns.map((column) => (
+                <th
+                  key={column.key}
+                  className="whitespace-nowrap px-5 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
+                >
+                  {column.label}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {pageRecords.map((record, index) => (
               <tr key={index} className="border-b border-gray-50 hover:bg-gray-50">
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-500">
-                  {record.created_at ?? "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm font-medium text-gray-900">
-                  {record.name ?? "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-indigo-600">
-                  {record.email ?? "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4">
-                  <StatusBadge status={record.crm_status ?? "—"} />
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-700">
-                  {record.company ?? "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-700">
-                  {record.country_code || record.mobile_without_country_code
-                    ? `${record.country_code ?? ""} ${record.mobile_without_country_code ?? ""}`.trim()
-                    : "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-700">
-                  {[record.city, record.country].filter(Boolean).join(", ") || "—"}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4">
-                  {record.lead_owner ? (
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-semibold text-white ${getAvatarColor(
-                          record.lead_owner
-                        )}`}
+                {columns.map((column) => {
+                  const value = record[column.key];
+
+                  if (column.key === "crm_status") {
+                    return (
+                      <td key={column.key} className="whitespace-nowrap px-5 py-4">
+                        <StatusBadge status={value ?? "—"} />
+                      </td>
+                    );
+                  }
+
+                  if (column.key === "lead_owner") {
+                    return (
+                      <td key={column.key} className="whitespace-nowrap px-5 py-4">
+                        {value ? (
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-semibold text-white ${getAvatarColor(
+                                value
+                              )}`}
+                            >
+                              {getInitials(value)}
+                            </span>
+                            <span className="text-sm text-gray-700">{value}</span>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-400">—</span>
+                        )}
+                      </td>
+                    );
+                  }
+
+                  if (column.key === "email") {
+                    return (
+                      <td key={column.key} className="whitespace-nowrap px-5 py-4 text-sm text-indigo-600">
+                        {value ?? "—"}
+                      </td>
+                    );
+                  }
+
+                  if (column.key === "name") {
+                    return (
+                      <td key={column.key} className="whitespace-nowrap px-5 py-4 text-sm font-medium text-gray-900">
+                        {value ?? "—"}
+                      </td>
+                    );
+                  }
+
+                  if (
+                    column.key === "crm_note" ||
+                    column.key === "description"
+                  ) {
+                    return (
+                      <td
+                        key={column.key}
+                        className="min-w-70 max-w-100 whitespace-normal wrap-break-word px-5 py-4 text-sm italic text-gray-500"
                       >
-                        {getInitials(record.lead_owner)}
-                      </span>
-                      <span className="text-sm text-gray-700">{record.lead_owner}</span>
-                    </div>
-                  ) : (
-                    <span className="text-sm text-gray-400">—</span>
-                  )}
-                </td>
-                <td className="whitespace-nowrap px-5 py-4 text-sm text-gray-700">
-                  {record.data_source ?? "—"}
-                </td>
-                <td className="max-w-[220px] truncate whitespace-nowrap px-5 py-4 text-sm italic text-gray-500">
-                  {record.crm_note ?? "—"}
-                </td>
+                        {value ?? "—"}
+                      </td>
+                    );
+                  }
+
+                  return (
+                    <td key={column.key} className="whitespace-nowrap px-5 py-4 text-sm text-gray-700">
+                      {value ?? "—"}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 p-4 text-sm text-gray-500 sm:flex-row">
         <span>
           Showing {(currentPage - 1) * PAGE_SIZE + 1} to{" "}

@@ -5,7 +5,7 @@ interface LoaderProps {
 }
 
 import { useEffect, useState } from "react";
-import { Cpu, CheckCircle2, Loader2, Circle, Lightbulb, ShieldCheck, Gauge } from "lucide-react";
+import { Cpu, CheckCircle2, Loader2, Circle, Lightbulb,Gauge } from "lucide-react";
 
 const steps = [
   { label: "Upload Complete", detail: "1,402 records received" },
@@ -185,9 +185,6 @@ export default function Loader({ onCancel }: LoaderProps) {
         </span>
         <span className="flex items-center gap-1.5">
           <Gauge size={13} /> Avg: 450 records/sec
-        </span>
-        <span className="flex items-center gap-1.5">
-          <ShieldCheck size={13} /> AES-256 encrypted
         </span>
       </div>
 

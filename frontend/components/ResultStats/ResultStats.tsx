@@ -1,4 +1,4 @@
-import { Download, CheckCircle2, Zap } from "lucide-react";
+import { CheckCircle2, Zap } from "lucide-react";
 
 interface ResultStatsProps {
   processedRows: number;
@@ -6,7 +6,6 @@ interface ResultStatsProps {
   skippedRows: number;
   processingTimeMs: number;
   fasterThanPercent?: number;
-  onDownloadErrorLog: () => void;
   onFinishImport: () => void;
 }
 
@@ -16,7 +15,6 @@ export default function ResultStats({
   skippedRows,
   processingTimeMs,
   fasterThanPercent = 92,
-  onDownloadErrorLog,
   onFinishImport,
 }: ResultStatsProps) {
   const importedPercent = processedRows > 0 ? (importedRows / processedRows) * 100 : 0;
@@ -40,14 +38,8 @@ export default function ResultStats({
 
         <div className="flex items-center gap-3">
           <button
-            onClick={onDownloadErrorLog}
-            className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            <Download size={14} /> Download Error Log
-          </button>
-          <button
             onClick={onFinishImport}
-            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 cursor-pointer"
           >
             Finish Import
           </button>

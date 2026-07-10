@@ -90,6 +90,14 @@ export default function Home() {
     );
   }
 
+  const handleFinishImport = () => {
+    setSelectedFile(null);
+    setPreviewRows([]);
+    setCRMRecords([]);
+    setStats(null);
+    setCurrentStep("upload");
+  };  
+
   if (crmRecords.length > 0 && stats) {
   return (
     <main className="flex min-h-screen w-full flex-col bg-background text-text">
@@ -101,8 +109,7 @@ export default function Home() {
           importedRows={stats.importedRows}
           skippedRows={stats.skippedRows}
           processingTimeMs={stats.processingTimeMs}
-          onDownloadErrorLog={() => {/* wire to real error log endpoint */}}
-          onFinishImport={() => {/* e.g. reset flow or redirect */}}
+          onFinishImport={handleFinishImport}
         />
         <ResultTable records={crmRecords} />
         
